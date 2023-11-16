@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace ScorecardAPI.Models.DTO
 {
@@ -59,8 +60,8 @@ namespace ScorecardAPI.Models.DTO
                 Pool = match.Pool,
                 Status = match.Status,
                 Duration = match.Duration,
-                Started = match.StartTime.ToLongTimeString(),
-                Ended = match.EndTime.ToLongTimeString()
+                Started = match.StartTime.ToString(new CultureInfo("en-au")),
+                Ended = match.EndTime.ToString(new CultureInfo("en-au"))
             };
         }
     }

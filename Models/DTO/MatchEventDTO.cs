@@ -1,4 +1,6 @@
-﻿namespace ScorecardAPI.Models.DTO
+﻿using System.Globalization;
+
+namespace ScorecardAPI.Models.DTO
 {
     public class MatchEventDTO
     {
@@ -94,7 +96,7 @@
                         MatchId = matchEvent.MatchId,
                         EventId = matchEvent.MatchEventId,
                         EventType = matchEvent.EventType,
-                        EventTime = matchEvent.EventTime.ToLongTimeString(),
+                        EventTime = matchEvent.EventTime.ToString(new CultureInfo("en-au")),
                         FighterOneReduction = matchEvent.FighterOneReduction,
                         FighterTwoReduction = matchEvent.FighterTwoReduction,
                     };
@@ -104,7 +106,7 @@
                         MatchId = matchEvent.MatchId,
                         EventId = matchEvent.MatchEventId,
                         EventType = matchEvent.EventType,
-                        EventTime = matchEvent.EventTime.ToLongTimeString(),
+                        EventTime = matchEvent.EventTime.ToString(new CultureInfo("en-au")),
                         FighterOneReduction = matchEvent.FighterOneReduction,
                         FighterTwoReduction = matchEvent.FighterTwoReduction,
                         Reason = penaltyEvent.Reason
@@ -115,7 +117,7 @@
                         MatchId = matchEvent.MatchId,
                         EventId = matchEvent.MatchEventId,
                         EventType = matchEvent.EventType,
-                        EventTime = matchEvent.EventTime.ToLongTimeString(),
+                        EventTime = matchEvent.EventTime.ToString(new CultureInfo("en-au")),
                         FighterOneReduction = matchEvent.FighterOneReduction,
                         FighterTwoReduction = matchEvent.FighterTwoReduction,
                         UserId = disqualificationEvent.UserId,
@@ -127,7 +129,7 @@
                         MatchId = matchEvent.MatchId,
                         EventId = matchEvent.MatchEventId,
                         EventType = matchEvent.EventType,
-                        EventTime = matchEvent.EventTime.ToLongTimeString(),
+                        EventTime = matchEvent.EventTime.ToString(new CultureInfo("en-au")),
                         FighterOneReduction = matchEvent.FighterOneReduction,
                         FighterTwoReduction = matchEvent.FighterTwoReduction,
                     };

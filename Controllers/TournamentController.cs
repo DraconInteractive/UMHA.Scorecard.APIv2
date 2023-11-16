@@ -118,6 +118,8 @@ namespace ScorecardAPI.Controllers
                             newTournament.Matches.Add(match);
                         }
                     }
+                    fighterIndex += fightersInThisPool; // Update the index for the next pool
+
                 }
                 /*
                 for (int i = 0; i < createTournamentDTO.Fighters.Length; i++)
