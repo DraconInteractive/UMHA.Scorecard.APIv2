@@ -31,12 +31,11 @@ namespace ScorecardAPI
                 dbContext.Database.Migrate();
             }
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Scorecard API v1.0.0");
+            });
 
 
             app.UseHttpsRedirection();
