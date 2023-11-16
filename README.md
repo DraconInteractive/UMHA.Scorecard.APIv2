@@ -2,6 +2,8 @@
 
 Tournament scoring API for the purposes of use by Ursa Major Hema Academy. 
 
+REST API Docs here: https://draconinteractive.github.io/UMHA.Scorecard.APIv2/
+
 Consists of CRUD operations for Users, Tournaments, Matches and MatchEvents.
 
 <h2>Users</h2> 
