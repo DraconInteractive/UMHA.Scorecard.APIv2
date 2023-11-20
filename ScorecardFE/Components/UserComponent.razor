@@ -1,0 +1,56 @@
+﻿@using ScorecardAPI.Models;
+@using ScorecardAPI.Models.DTO;
+@using static ScorecardFE.Program;
+@inject DataTransferService dataTransfer;
+
+@if (tournaments == null)
+{
+    <p>
+        Loading...
+    </p>
+}
+else
+{
+    @foreach (var tournament in tournaments)
+    {
+        <div class="btn btn-outline-primary" @onclick="() => ToggleTournament(tournament)">
+            Tournament: @tournament.TournamentId
+        </div>
+        @if (IsTournamentVisible(tournament.TournamentId))
+        {
+            <TournamentComponent Tournament="tournament" />
+        }
+        <br />
+    }
+    
+}
+
+
+@code {
+    [Parameter] public User User { get; set; }
+
+    private TournamentOutputDTO[] tournaments;
+    private HashSet<int> visibleTournaments = new HashSet<int>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        while (tournaments == null)
+        {
+            await Task.Delay(100);
+            tournaments = dataTransfer.Tournaments;
+        }
+    }
+
+    private void ToggleTournament(TournamentOutputDTO tournament)
+    {
+        if (!visibleTournaments.Add(tournament.TournamentId))
+        {
+            visibleTournaments.Remove(tournament.TournamentId);
+        }
+    }
+
+    private bool IsTournamentVisible(int tournamentId)
+    {
+        return visibleTournaments.Contains(tournamentId);
+    }
+}

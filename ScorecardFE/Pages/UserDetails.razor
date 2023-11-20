@@ -1,0 +1,106 @@
+﻿@page "/users/{UserId}"
+@using Newtonsoft.Json;
+@using ScorecardAPI.Models;
+@using ScorecardAPI.Models.DTO;
+@using static ScorecardFE.Program;
+@inject DataTransferService dataTransfer;
+@inject HttpClient Http;
+@inject NavigationManager Nav;
+
+<h3>@currentUser.FirstName @currentUser.LastName</h3>
+
+<p><em>@statusText</em></p>
+
+@if (currentUser == null || tournaments == null)
+{
+    
+}
+else
+{
+    <ScorecardFE.Components.UserComponent User="currentUser" />
+}
+
+
+
+@code {
+    [Parameter]
+    public string? UserId { get; set; }
+
+    private User? currentUser;
+    private TournamentOutputDTO[]? tournaments;
+
+    private const int RefreshInterval = 5000;
+
+    private string? statusText;
+
+    protected override async Task OnInitializedAsync()
+    {
+        statusText = "Loading...";
+        currentUser = dataTransfer.targetUser;
+
+        await FetchData();
+        StateHasChanged();
+
+        await Refresh();
+    }
+
+    private async Task Refresh()
+    {
+        await Task.Delay(RefreshInterval);
+
+        await FetchData();
+        StateHasChanged();
+
+        string path = new Uri(Nav.Uri).AbsolutePath;
+        bool isUsersPageActive = path.Equals($"/users/{UserId}", StringComparison.OrdinalIgnoreCase);
+        if (isUsersPageActive)
+        {
+            Refresh();
+        }
+    }
+
+    private async Task FetchData()
+    {
+        try
+        {
+            dataTransfer.Users = await Http.GetFromJsonAsync<User[]>("api/users");
+
+            int parsedID;
+            if (!int.TryParse(UserId, out parsedID))
+            {
+                // Handle the case when UserId is not a valid integer
+                // Maybe log the error or set an error message
+                return;
+            }
+
+            currentUser = dataTransfer.Users.FirstOrDefault(u => u.UserId == parsedID);
+            dataTransfer.targetUser = currentUser;
+
+            string tournamentJson = await Http.GetStringAsync($"api/tournament");
+            tournaments = JsonConvert.DeserializeObject<TournamentOutputDTO[]>(tournamentJson);
+
+            dataTransfer.Tournaments = tournaments;
+            statusText = "";
+        }
+        catch (HttpRequestException httpEx)
+        {
+            // Handle HTTP request related exceptions
+            // Log error or set a user-friendly error message
+            statusText = "HTTP Error: " + httpEx.Message;
+        }
+        catch (JsonException jsonEx)
+        {
+            // Handle JSON deserialization exceptions
+            // Log error or set a user-friendly error message
+            statusText = "JSON Error: " + jsonEx.Message;
+        }
+        catch (Exception ex)
+        {
+            // Handle other exceptions
+            // Log error or set a user-friendly error message
+            statusText = "Unknown Error: " + ex.Message;
+
+        }
+    }
+
+}

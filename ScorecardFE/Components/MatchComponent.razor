@@ -1,0 +1,80 @@
+﻿@using Newtonsoft.Json;
+@using ScorecardAPI.Models;
+@using ScorecardAPI.Models.DTO;
+@using static ScorecardFE.Program;
+@inject HttpClient Http;
+@inject DataTransferService dataTransfer;
+
+@if (dataTransfer.Users == null)
+{
+    <div>
+        <p>No match data</p>
+    </div>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>
+                    @fighterOne.FirstName
+                </th>
+                <th>
+                    @fighterTwo.FirstName
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Health: </td>
+                <td>
+                    @Match.FighterOneHealth
+                </td>
+                <td>
+                    @Match.FighterTwoHealth
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div>
+        Events:
+        @if (MatchEvents == null)
+        {
+            <p>Loading...</p>
+        }
+        else
+        {
+            @foreach (var evt in MatchEvents)
+            {
+                <MatchEventComponent Event="evt" />
+            }
+        }
+        
+        <!-- Display other details here -->
+    </div>
+}
+
+
+@code {
+    [Parameter] public MatchOutputDTO? Match { get; set; }
+
+    User? fighterOne;
+    User? fighterTwo;
+
+    MatchEventOutputDTO[]? MatchEvents;
+
+    protected override async Task OnInitializedAsync()
+    {
+        while (dataTransfer.Users == null)
+        {
+            await Task.Delay(100);
+        }
+        fighterOne = dataTransfer.Users.FirstOrDefault(x => x.UserId == Match.FighterOneId);
+        fighterTwo = dataTransfer.Users.FirstOrDefault(x => x.UserId == Match.FighterTwoId);
+
+        string evtJson = await Http.GetStringAsync($"pi/matches/{Match.MatchId}/events");
+        MatchEvents = JsonConvert.DeserializeObject<MatchEventOutputDTO[]>(evtJson);
+    }
+}

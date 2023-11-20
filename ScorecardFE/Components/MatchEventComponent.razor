@@ -1,0 +1,15 @@
+﻿@using ScorecardAPI.Models;
+@using ScorecardAPI.Models.DTO;
+@using static ScorecardFE.Program;
+
+@inject DataTransferService dataTransfer;
+
+
+<div>
+    This is @Event.EventType event!
+    <!-- Display other details here -->
+</div>
+
+@code {
+    [Parameter] public MatchEventOutputDTO Event { get; set; }
+}

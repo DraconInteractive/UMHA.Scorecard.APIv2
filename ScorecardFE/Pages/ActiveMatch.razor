@@ -1,0 +1,384 @@
+﻿@page "/match/active/{MatchId}"
+@using Newtonsoft.Json;
+@using ScorecardAPI.Models;
+@using ScorecardAPI.Models.DTO;
+@using static ScorecardFE.Program;
+@inject DataTransferService dataTransfer;
+@inject HttpClient Http;
+@inject NavigationManager Nav;
+
+<!-- Needs: Timer button -->
+<div class="container-fluid mt-3">
+    <div class="row gx-5">
+        <!-- Competitor 1 -->
+        <div class="col-md-4 mb-3">
+            <!-- Score -->
+            <div class="card mb">
+                <div class="card-header card-header-custom bg-danger text-white">
+                    Lee North
+                </div>
+                <div class="card-body card-body-custom">
+                    <div class="score">6</div>
+                    <div class="penalties">Warnings and Penalties</div>
+                </div>
+            </div>
+
+            <!-- Points -->
+            <div class="card">
+                <div class="card-body card-body-custom">
+                    <h5 class="card-title">Points</h5>
+                    <div class="row gx-5 mb">
+                        <div class="col-md-3">
+                            <div class="point-square-d">-1</div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="point-square-d">-2</div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="point-square-d">-3</div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="point-square-d">-4</div>
+                        </div>
+                    </div>
+                    <h5 class="card-title">Warnings & Penalties</h5>
+                    <div class="row gx-3">
+                        <div class="col-md-6">
+                            <div class="point-square-d">
+                                <p>
+                                    Line Fault
+                                    (-1 point)
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="point-square-d">
+                                <p>
+                                    Yellow Card
+                                    (-1 point)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row gx-3 mt">
+                        <div class="col-md-6">
+                            <div class="point-square-d">
+                                <p>
+                                    Red Card
+                                    (Match Loss)
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="point-square-d">
+                                <p>
+                                    Black Card
+                                    (Disqualification)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Competitor 2 -->
+        <div class="col-md-4 mb-3">
+            <!-- Score -->
+            <div class="card mb">
+                <div class="card-header card-header-custom bg-primary text-white">
+                    Peter Carey
+                </div>
+                <div class="card-body card-body-custom">
+                    <div class="score">3</div>
+                    <div class="penalties">Warnings and Penalties</div>
+                </div>
+            </div>
+
+            <!-- Points -->
+            <div class="card mb">
+                <div class="card-body card-body-custom">
+                    <h5 class="card-title">Points</h5>
+                    <div class="row gx-5 mb">
+                        <div class="col-md-3">
+                            <div class="point-square-d">-1</div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="point-square-d">-2</div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="point-square-d">-3</div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="point-square-d">-4</div>
+                        </div>
+                    </div>
+                    <h5 class="card-title">Warnings & Penalties</h5>
+                    <div class="row gx-3">
+                        <div class="col-md-6">
+                            <div class="point-square-d">
+                                <p>
+                                    Line Fault
+                                    (-1 point)
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="point-square-d">
+                                <p>
+                                    Yellow Card
+                                    (-1 point)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row gx-3 mt">
+                        <div class="col-md-6">
+                            <div class="point-square-d">
+                                <p>
+                                    Red Card
+                                    (Match Loss)
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="point-square-d">
+                                <p>
+                                    Black Card
+                                    (Disqualification)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Add Exchange -->
+            <div>
+                <button type="button" class="add-exchange">Add Exchange</button>
+            </div>
+        </div>
+        <!--  -->
+        <div class="col-md-3">
+            <!-- Match Details -->
+            <div class="card detail-section mb">
+                <div class="card-body">
+                    <h5 class="card-title">Match Details</h5>
+                    <h6 class="card-title">Pool 1 | Match 1/1</h6>
+                    <p></p>
+                    <h6 class="card-title">Time remaining</h6>
+                    <div class="match-timer">00:25</div>
+                    <p></p>
+                    <h6 class="card-title">Winner</h6>
+                    <div class="winner-indicator">Red</div>
+                </div>
+            </div>
+            <!-- Upcoming Matches -->
+            <div class="card detail-section mt">
+                <div class="card-body">
+                    <h5 class="card-title">Upcoming Matches</h5>
+                    <div class="upcoming-matches mt-3">
+                        <p></p>
+                        <p>Jacinta Reynolds (Red) vs Luke Tornilla (Blue)</p>
+                        <p>Jacinta Reynolds (Red) vs Luke Tornilla (Blue)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p></p>
+    <!-- Point Deductions / Match Events -->
+    <div class="card event-container row gx-5">
+        <div class="col flex-5-percent event-square">
+            1
+        </div>
+    </div>
+    <div class="card event-container row gx-5">
+    </div>
+</div>
+
+
+<style>
+
+    .flex-5-percent {
+      flex: 0 0 5%;
+      max-width: 5%; /* Ensuring the max-width matches the flex-basis */
+    }
+
+    .event-square {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #dee2e6; /* Bootstrap's border color */
+        margin-bottom: 4px; /* If you want space between the rows */
+        /* Set a minimum width if necessary */
+        min-width: 50px; /* Example minimum width */
+        height: 50px; /* This will give it a square aspect ratio */
+    }
+
+    .event-container {
+        padding-top: 1rem; /* Equal top and bottom padding */
+        padding-bottom: .5rem;
+    }
+
+    .event-square-red {
+        background-color: #ff000f;  
+    }
+
+    .event-square-blue {
+        background-color: #0000ff;
+    }
+
+    .point-square-d {
+        text-align: center;
+        color: #333;
+        border: 1px solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+        padding-top: 1rem; /* Equal top and bottom padding */
+        padding-bottom: .5rem;
+    }
+
+    .point-square-r {
+        text-align: center;
+        color: #333;
+        border: 1px solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+        padding-top: 1rem; /* Equal top and bottom padding */
+        padding-bottom: 1rem;
+    }
+
+    .card-title {
+        text-align: center;
+    }
+
+    .card-header-custom {
+        background-color: #f8f9fa; /* Light gray background to match the header */
+        border-bottom: none;
+        font-size: 1.25rem; /* Adjust font size if needed */
+        color: #333; /* Dark text color */
+    }
+
+    .card-body {
+        background-color: #f8f9fa;
+        color: #333;
+    }
+
+    .card-body-custom {
+      padding: 1.5rem 1rem;
+      text-align: center;
+    }
+
+    .card-body-custom .score {
+        font-size: 4rem; /* Larger font size for the score */
+        color: #333; /* Dark text color */
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+
+    .card-body-custom .penalties {
+        color: #6c757d; /* Muted text color for penalties */
+        font-size: 1rem;
+    }
+
+    .bg-red {
+      background-color: #ff6b6b;
+    }
+
+    .bg-blue {
+      background-color: #48a1ff;
+    }
+
+    .match-detail {
+      margin-bottom: 1rem;
+    }
+
+    .match-timer,
+    .winner-indicator,
+    .add-exchange {
+      padding: 0.75rem;
+      text-align: center;
+      color: #333;
+      margin: 0.25rem;
+      border: 1px solid rgba(0,0,0,.125);
+      border-radius: .25rem
+    }
+
+    .match-timer {
+      background-color: #ffe66d;
+    }
+
+    .winner-indicator {
+      background-color: #ff6b6b;
+    }
+
+    .add-exchange {
+      background-color: #28a745;
+    }
+
+    .upcoming-matches {
+      padding: 0.5rem 1rem;
+      background-color: #f8f9fa;
+      border: 1px solid #ddd;
+      margin-top: 1rem;
+    }
+
+    .upcoming-match {
+      padding: 0.25rem 0;
+    }
+
+    .detail-section {
+        padding-left: 0; /* Remove padding for tight alignment */
+        padding-right: 0; /* Remove padding for tight alignment */
+    }
+
+    .mb {
+        margin-bottom: 15px;
+    }
+
+    .mt {
+        margin-top: 10px;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public string? MatchId { get; set; }
+
+    private User? currentUser;
+    private TournamentOutputDTO[]? tournaments;
+
+    private const int RefreshInterval = 5000;
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUser = dataTransfer.targetUser;
+
+        await FetchData();
+        StateHasChanged();
+
+        await Refresh();
+    }
+
+    private async Task Refresh()
+    {
+        await Task.Delay(RefreshInterval);
+
+        await FetchData();
+        StateHasChanged();
+
+        string path = new Uri(Nav.Uri).AbsolutePath;
+        bool isPageActive = path.Equals($"/match/{MatchId}", StringComparison.OrdinalIgnoreCase);
+        if (isPageActive)
+        {
+            Refresh();
+        }
+    }
+
+    private async Task FetchData()
+    {
+        int parsedID = int.Parse(MatchId);
+
+        string tournamentJson = await Http.GetStringAsync($"api/tournament");
+        tournaments = JsonConvert.DeserializeObject<TournamentOutputDTO[]>(tournamentJson);
+
+        dataTransfer.Tournaments = tournaments;
+    }
+}

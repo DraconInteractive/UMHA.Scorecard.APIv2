@@ -1,0 +1,82 @@
+﻿@page "/tournaments"
+@using Newtonsoft.Json;
+@using ScorecardAPI.Models;
+@using ScorecardAPI.Models.DTO;
+@using ScorecardFE.Components
+@using static ScorecardFE.Program;
+@inject DataTransferService dataTransfer;
+@inject NavigationManager Nav;
+@inject HttpClient Http;
+
+<h3>Tournaments</h3>
+@if (tournaments == null)
+{
+    
+}
+else
+{
+    @foreach (var tournament in tournaments)
+    {
+        <div class="btn btn-outline-primary" @onclick="() => ToggleTournament(tournament)">
+            Tournament: @tournament.TournamentId
+        </div>
+        @if (IsTournamentVisible(tournament.TournamentId))
+        {
+            <TournamentComponent Tournament="tournament" />
+        }
+        <br />
+    }
+}
+
+@code {
+    private TournamentOutputDTO[]? tournaments;
+
+    private const int RefreshInterval = 5000;
+    private HashSet<int> visibleTournaments = new HashSet<int>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await FetchData();
+        StateHasChanged();
+
+        await Refresh();
+    }
+
+    private async Task Refresh()
+    {
+        await Task.Delay(RefreshInterval);
+
+        await FetchData();
+        StateHasChanged();
+
+        string path = new Uri(Nav.Uri).AbsolutePath;
+        bool isUsersPageActive = path.Equals($"/tournaments", StringComparison.OrdinalIgnoreCase);
+        if (isUsersPageActive)
+        {
+            Refresh();
+        }
+    }
+
+    private async Task FetchData()
+    {
+        dataTransfer.Users = await Http.GetFromJsonAsync<User[]>("api/users");
+
+        string tournamentJson = await Http.GetStringAsync($"api/tournament");
+        tournaments = JsonConvert.DeserializeObject<TournamentOutputDTO[]>(tournamentJson);
+        dataTransfer.Tournaments = tournaments;
+    }
+
+    private void ToggleTournament(TournamentOutputDTO tournament)
+    {
+        if (!visibleTournaments.Add(tournament.TournamentId))
+        {
+            visibleTournaments.Remove(tournament.TournamentId);
+        }
+    }
+
+    private bool IsTournamentVisible(int tournamentId)
+    {
+        return visibleTournaments.Contains(tournamentId);
+    }
+}

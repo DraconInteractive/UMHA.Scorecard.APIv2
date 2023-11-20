@@ -20,6 +20,14 @@ namespace ScorecardAPI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<ScorecardContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("ScorecardDatabase")));
+            builder.Services.AddCors(options => 
+                options.AddPolicy("MyCorsPolicy", builder =>
+                {
+                    builder.AllowAnyOrigin() // Replace with your Blazor app's origin
+                           .AllowAnyHeader()
+                           .AllowAnyMethod();
+                })
+            );
 
             var app = builder.Build();
 
@@ -31,12 +39,20 @@ namespace ScorecardAPI
                 dbContext.Database.Migrate();
             }
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
+            if (app.Environment.IsDevelopment())
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Scorecard API v1.0.0");
-            });
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Scorecard API v1.0.0");
+                });
+            }
+            else
+            {
+                //app.UseHsts();
+            }
 
+            app.UseCors("MyCorsPolicy");
 
             app.UseHttpsRedirection();
 
@@ -46,5 +62,7 @@ namespace ScorecardAPI
 
             app.Run();
         }
+
+      
     }
 }
