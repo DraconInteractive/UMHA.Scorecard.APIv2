@@ -9,17 +9,20 @@
 
 <!-- Needs: Timer button -->
 <div class="container-fluid mt-3">
+    <div class="mb-2">
+        <button type="button" class="back-home">Back to Match List</button>
+    </div>
+
     <div class="row gx-5">
         <!-- Competitor 1 -->
         <div class="col-md-4 mb-3">
             <!-- Score -->
             <div class="card mb">
                 <div class="card-header card-header-custom bg-danger text-white">
-                    Lee North
+                    @F1_Name
                 </div>
                 <div class="card-body card-body-custom">
-                    <div class="score">6</div>
-                    <div class="penalties">Warnings and Penalties</div>
+                    <div class="score">@F1_Health</div>
                 </div>
             </div>
 
@@ -27,24 +30,27 @@
             <div class="card">
                 <div class="card-body card-body-custom">
                     <h5 class="card-title">Points</h5>
-                    <div class="row gx-5 mb">
+                    <div style="height:10px"></div>
+                    <div class="row gx-4 mb">
                         <div class="col-md-3">
-                            <div class="point-square-d">-1</div>
+                            <button type="button" class="point-button-d-pressed">— 1</button>
                         </div>
                         <div class="col-md-3">
-                            <div class="point-square-d">-2</div>
+                            <button type="button" class="point-button-d">— 2</button>
                         </div>
                         <div class="col-md-3">
-                            <div class="point-square-d">-3</div>
+                            <button type="button" class="point-button-d">— 3</button>
                         </div>
                         <div class="col-md-3">
-                            <div class="point-square-d">-4</div>
+                            <button type="button" class="point-button-d">— 4</button>
                         </div>
                     </div>
+                    <div style="height:10px"></div>
                     <h5 class="card-title">Warnings & Penalties</h5>
+                    <div style="height:10px"></div>
                     <div class="row gx-3">
                         <div class="col-md-6">
-                            <div class="point-square-d">
+                            <div class="point-button-d">
                                 <p>
                                     Line Fault
                                     (-1 point)
@@ -52,7 +58,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="point-square-d">
+                            <div class="point-button-d">
                                 <p>
                                     Yellow Card
                                     (-1 point)
@@ -62,7 +68,7 @@
                     </div>
                     <div class="row gx-3 mt">
                         <div class="col-md-6">
-                            <div class="point-square-d">
+                            <div class="point-button-d">
                                 <p>
                                     Red Card
                                     (Match Loss)
@@ -70,7 +76,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="point-square-d">
+                            <div class="point-button-d">
                                 <p>
                                     Black Card
                                     (Disqualification)
@@ -86,36 +92,38 @@
             <!-- Score -->
             <div class="card mb">
                 <div class="card-header card-header-custom bg-primary text-white">
-                    Peter Carey
+                    @F2_Name
                 </div>
                 <div class="card-body card-body-custom">
-                    <div class="score">3</div>
-                    <div class="penalties">Warnings and Penalties</div>
+                    <div class="score">@F2_Health</div>
                 </div>
             </div>
 
             <!-- Points -->
-            <div class="card mb">
+            <div class="card">
                 <div class="card-body card-body-custom">
                     <h5 class="card-title">Points</h5>
-                    <div class="row gx-5 mb">
+                    <div style="height:10px"></div>
+                    <div class="row gx-4 mb">
                         <div class="col-md-3">
-                            <div class="point-square-d">-1</div>
+                            <button type="button" class="point-button-d-pressed">— 1</button>
                         </div>
                         <div class="col-md-3">
-                            <div class="point-square-d">-2</div>
+                            <button type="button" class="point-button-d">— 2</button>
                         </div>
                         <div class="col-md-3">
-                            <div class="point-square-d">-3</div>
+                            <button type="button" class="point-button-d">— 3</button>
                         </div>
                         <div class="col-md-3">
-                            <div class="point-square-d">-4</div>
+                            <button type="button" class="point-button-d">— 4</button>
                         </div>
                     </div>
+                    <div style="height:10px"></div>
                     <h5 class="card-title">Warnings & Penalties</h5>
+                    <div style="height:10px"></div>
                     <div class="row gx-3">
                         <div class="col-md-6">
-                            <div class="point-square-d">
+                            <div class="point-button-d">
                                 <p>
                                     Line Fault
                                     (-1 point)
@@ -123,7 +131,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="point-square-d">
+                            <div class="point-button-d">
                                 <p>
                                     Yellow Card
                                     (-1 point)
@@ -133,7 +141,7 @@
                     </div>
                     <div class="row gx-3 mt">
                         <div class="col-md-6">
-                            <div class="point-square-d">
+                            <div class="point-button-d">
                                 <p>
                                     Red Card
                                     (Match Loss)
@@ -141,7 +149,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="point-square-d">
+                            <div class="point-button-d">
                                 <p>
                                     Black Card
                                     (Disqualification)
@@ -151,24 +159,32 @@
                     </div>
                 </div>
             </div>
-            <!-- Add Exchange -->
-            <div>
-                <button type="button" class="add-exchange">Add Exchange</button>
-            </div>
         </div>
+
         <!--  -->
         <div class="col-md-3">
             <!-- Match Details -->
             <div class="card detail-section mb">
                 <div class="card-body">
                     <h5 class="card-title">Match Details</h5>
-                    <h6 class="card-title">Pool 1 | Match 1/1</h6>
+                    <h6 class="card-title">Pool @Pool | Match @MatchCurrent / @MatchTotal</h6>
                     <p></p>
                     <h6 class="card-title">Time remaining</h6>
-                    <div class="match-timer">00:25</div>
+                    <div class="match-timer">@TimeRemaining</div>
                     <p></p>
                     <h6 class="card-title">Winner</h6>
-                    <div class="winner-indicator">Red</div>
+                    @if (F1_Health > F2_Health)
+                    {
+                        <div class="winner-indicator red">Red</div>
+                    }
+                    else if (F2_Health > F1_Health)
+                    {
+                        <div class="winner-indicator blue">Blue</div>
+                    }
+                    else
+                    {
+                        <div class="winner-indicator draw">Draw</div>
+                    }
                 </div>
             </div>
             <!-- Upcoming Matches -->
@@ -177,54 +193,110 @@
                     <h5 class="card-title">Upcoming Matches</h5>
                     <div class="upcoming-matches mt-3">
                         <p></p>
-                        <p>Jacinta Reynolds (Red) vs Luke Tornilla (Blue)</p>
-                        <p>Jacinta Reynolds (Red) vs Luke Tornilla (Blue)</p>
+                        <p>@Upcoming1</p>
+                        <p>@Upcoming2</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <p></p>
+    <!-- Add Exchange -->
+    <div>
+        <button type="button" class="add-exchange">Add Exchange</button>
+    </div>
+    <div style="height:50px"></div>
     <!-- Point Deductions / Match Events -->
-    <div class="card event-container row gx-5">
-        <div class="col flex-5-percent event-square">
-            1
+    <h5>History</h5>
+    <div style="height:10px"></div>
+    <div class="card event-container">
+        <div class="col-md-6">
+            <div class="row gx-1">
+                @foreach (var evt in TestEvents)
+                {
+                    var dEvt = MatchEventDisplay.FromMatchEvent(evt);
+                    <div class="col-md-1">
+                        <div class="col-md-6 offset-md-3">
+                            <div class="@dEvt.Style">
+                                <p>@dEvt.Type</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @for (int i = 0; i < 12; i++)
+                {
+                    
+                }
+            </div>
         </div>
-    </div>
-    <div class="card event-container row gx-5">
-    </div>
+        <div class="col-md-6 mtp">
+            <div class="row gx-1">
+                @foreach (var evt in TestEvents)
+                {
+                    <div class="col-md-1">
+                        <div class="event-square square-red">
+                            <p>@evt.FighterOneReduction</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-md-6 mtp">
+            <div class="row gx-1">
+                @foreach (var evt in TestEvents)
+                {
+                    <div class="col-md-1">
+                        <div class="event-square square-blue">
+                            <p>@evt.FighterTwoReduction</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>  
+    <div style="height:50px"></div>
 </div>
 
 
 <style>
-
-    .flex-5-percent {
-      flex: 0 0 5%;
-      max-width: 5%; /* Ensuring the max-width matches the flex-basis */
+    .event-square {
+        position: relative; /* Needed for absolute positioning of the pseudo-element */
+        text-align: center;
+        border: 1px solid rgba(0,0,0,.125);
     }
 
-    .event-square {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border: 1px solid #dee2e6; /* Bootstrap's border color */
-        margin-bottom: 4px; /* If you want space between the rows */
-        /* Set a minimum width if necessary */
-        min-width: 50px; /* Example minimum width */
-        height: 50px; /* This will give it a square aspect ratio */
+    .event-square.disqualify {
+        position: relative; /* Needed for absolute positioning of the pseudo-element */
+        text-align: center;
+        border: 1px solid rgba(255,255,255,.5);
+        background-color: rgba(0,0,0,.8);
+        color: rgb(255, 255, 255);
+    }
+
+    .event-square::before {
+        content: '';
+        display: block;
+        padding-top: 100%; /* This creates a square aspect ratio */
+    }
+
+    .event-square > p {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
     }
 
     .event-container {
-        padding-top: 1rem; /* Equal top and bottom padding */
-        padding-bottom: .5rem;
+
     }
 
-    .event-square-red {
-        background-color: #ff000f;  
+    .square-red {
+        background-color: #ff6b6b;
     }
 
-    .event-square-blue {
-        background-color: #0000ff;
+    .square-blue {
+        background-color: #0d6efd;
     }
 
     .point-square-d {
@@ -254,6 +326,7 @@
         border-bottom: none;
         font-size: 1.25rem; /* Adjust font size if needed */
         color: #333; /* Dark text color */
+        text-align: center;
     }
 
     .card-body {
@@ -309,8 +382,78 @@
       background-color: #ff6b6b;
     }
 
+    .winner-indicator.red {
+         background-color: #ff6b6b;
+    }
+
+    .winner-indicator.blue{
+        background-color: #48a1ff;
+    }
+
+    .winner-indicator.draw{
+        background-color: white;
+    }
+
     .add-exchange {
       background-color: #28a745;
+    }
+
+    .back-home {
+        background-color: white;
+        padding: 0.75rem;
+        text-align: center;
+        color: gray;
+        margin: 0.25rem;
+        border: none;
+        border-radius: .25rem;
+    }
+
+    .back-home:hover {
+        color: black;
+    }
+
+    .point-button-d {
+        text-align: center;
+        background-color: white;
+        border: 1px solid black;
+        border-radius: .25rem;
+        padding: 1rem;
+    }
+
+    .point-button-d:hover {
+        border-color: #dc3545;
+        color: #dc3545;
+    }
+
+    .point-button-d-pressed {
+        text-align: center;
+        background-color: #dc3545;
+        border: 1px solid #dc3545;
+        border-radius: .25rem;
+        padding: 1rem;
+        color: white;
+    }
+
+    .point-button-r {
+        text-align: center;
+        background-color: white;
+        border: 1px solid black;
+        border-radius: .25rem;
+        padding: 1rem;
+    }
+
+    .point-button-r:hover {
+        border-color: #0d6efd;
+        color: #0d6efd;
+    }
+
+    .point-button-r-pressed {
+        text-align: center;
+        background-color: #0d6efd;
+        border: 1px solid #0d6efd;
+        border-radius: .25rem;
+        padding: 1rem;
+        color: white;
     }
 
     .upcoming-matches {
@@ -336,24 +479,45 @@
     .mt {
         margin-top: 10px;
     }
+
+    .mtp {
+        margin-top: 5px;
+    }
 </style>
 
 @code {
     [Parameter]
     public string? MatchId { get; set; }
 
-    private User? currentUser;
     private TournamentOutputDTO[]? tournaments;
 
     private const int RefreshInterval = 5000;
 
+    // Displays
+    public int Pool;
+    public int MatchCurrent, MatchTotal;
+    public string F1_Name, F2_Name;
+    public int F1_Health, F2_Health;
+    public string TimeRemaining;
+    public string Upcoming1, Upcoming2;
+    public List<MatchEvent> TestEvents;
+    private int evtCounter = 0;
     protected override async Task OnInitializedAsync()
     {
-        currentUser = dataTransfer.targetUser;
-
+        F1_Health = 10;
+        F2_Health = 10;
+        TimeRemaining = "00:25";
+        Upcoming1 = "Jim Campbell (Red) vs Josh Fisher (Blue)";
+        Upcoming2 = "Jacinta Reynolds (Red) vs Luke Tornilla (Blue)";
+        MatchCurrent = 1;
+        MatchTotal = 25;
+        F1_Name = "Lee North";
+        F2_Name = "Peter Carey";
+        TestEvents = new List<MatchEvent>();
         await FetchData();
         StateHasChanged();
 
+        Demo();
         await Refresh();
     }
 
@@ -372,6 +536,56 @@
         }
     }
 
+    private async Task Demo ()
+    {
+        F1_Health--;
+        F2_Health--;
+
+        if (F1_Health < 0) { F1_Health = 10; F2_Health = 10; }
+
+        TimeRemaining = DateTime.Now.ToString("mm:ss");
+
+        Pool++;
+        if (Pool > 3) { Pool = 0; }
+
+        MatchCurrent++;
+        if (MatchCurrent > MatchTotal)
+        {
+            MatchCurrent = 1;
+        }
+
+        evtCounter++;
+        if (evtCounter > 2) { evtCounter = 0; }
+        string eType = "Strike";
+        switch (evtCounter)
+        {
+            case 1:
+                eType = "Penalty";
+                break;
+            case 2:
+                eType = "Disqualification";
+                break;
+        }
+
+        TestEvents.Add(new MatchEvent()
+            {
+                EventType = eType,
+                FighterOneReduction = 1,
+                FighterTwoReduction = 1,
+            });
+
+        if (TestEvents.Count > 10)
+        {
+            TestEvents.Clear();
+        }
+
+        StateHasChanged();
+
+        await Task.Delay(2000);
+
+        Demo();
+    }
+
     private async Task FetchData()
     {
         int parsedID = int.Parse(MatchId);
@@ -380,5 +594,42 @@
         tournaments = JsonConvert.DeserializeObject<TournamentOutputDTO[]>(tournamentJson);
 
         dataTransfer.Tournaments = tournaments;
+    }
+
+    public class MatchEventDisplay
+    {
+        public string Type;
+        public string Style;
+        public int F1;
+        public int F2;
+
+        public static MatchEventDisplay FromMatchEvent (MatchEvent evt)
+        {
+            string type = "S";
+            string style = "event-square";
+
+            switch (evt.EventType)
+            {
+                case "Strike":
+                    break;
+                case "Penalty":
+                    type = "P";
+                    break;
+                case "Disqualification":
+                    type = "D";
+                    style = "event-square disqualify";
+                    break;
+            }
+
+            MatchEventDisplay med = new MatchEventDisplay()
+            {
+                Type = type,
+                Style = style,
+                F1 = evt.FighterOneReduction,
+                F2 = evt.FighterTwoReduction
+            };
+
+            return med;
+        }
     }
 }
