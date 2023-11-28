@@ -18,7 +18,7 @@
         <div class="col-md-4 mb-3">
             <!-- Score -->
             <div class="card mb">
-                <div class="card-header card-header-custom bg-danger text-white">
+                <div class="card-header card-header-custom f-red text-white">
                     @F1_Name
                 </div>
                 <div class="card-body card-body-custom">
@@ -33,16 +33,16 @@
                     <div style="height:10px"></div>
                     <div class="row gx-4 mb">
                         <div class="col-md-3">
-                            <button type="button" class="point-button-d-pressed">— 1</button>
+                            <button type="button" class="point-button-pressed r">— 1</button>
                         </div>
                         <div class="col-md-3">
-                            <button type="button" class="point-button-d">— 2</button>
+                            <button type="button" class="point-button r">— 2</button>
                         </div>
                         <div class="col-md-3">
-                            <button type="button" class="point-button-d">— 3</button>
+                            <button type="button" class="point-button r">— 3</button>
                         </div>
                         <div class="col-md-3">
-                            <button type="button" class="point-button-d">— 4</button>
+                            <button type="button" class="point-button r">— 4</button>
                         </div>
                     </div>
                     <div style="height:10px"></div>
@@ -50,7 +50,7 @@
                     <div style="height:10px"></div>
                     <div class="row gx-3">
                         <div class="col-md-6">
-                            <div class="point-button-d">
+                            <div class="point-button r">
                                 <p>
                                     Line Fault
                                     (-1 point)
@@ -58,7 +58,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="point-button-d">
+                            <div class="point-button r">
                                 <p>
                                     Yellow Card
                                     (-1 point)
@@ -68,7 +68,7 @@
                     </div>
                     <div class="row gx-3 mt">
                         <div class="col-md-6">
-                            <div class="point-button-d">
+                            <div class="point-button r">
                                 <p>
                                     Red Card
                                     (Match Loss)
@@ -76,7 +76,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="point-button-d">
+                            <div class="point-button r">
                                 <p>
                                     Black Card
                                     (Disqualification)
@@ -91,7 +91,7 @@
         <div class="col-md-4 mb-3">
             <!-- Score -->
             <div class="card mb">
-                <div class="card-header card-header-custom bg-primary text-white">
+                <div class="card-header card-header-custom f-blue text-white">
                     @F2_Name
                 </div>
                 <div class="card-body card-body-custom">
@@ -106,16 +106,16 @@
                     <div style="height:10px"></div>
                     <div class="row gx-4 mb">
                         <div class="col-md-3">
-                            <button type="button" class="point-button-d-pressed">— 1</button>
+                            <button type="button" class="point-button-pressed b">— 1</button>
                         </div>
                         <div class="col-md-3">
-                            <button type="button" class="point-button-d">— 2</button>
+                            <button type="button" class="point-button b">— 2</button>
                         </div>
                         <div class="col-md-3">
-                            <button type="button" class="point-button-d">— 3</button>
+                            <button type="button" class="point-button b">— 3</button>
                         </div>
                         <div class="col-md-3">
-                            <button type="button" class="point-button-d">— 4</button>
+                            <button type="button" class="point-button b">— 4</button>
                         </div>
                     </div>
                     <div style="height:10px"></div>
@@ -123,7 +123,7 @@
                     <div style="height:10px"></div>
                     <div class="row gx-3">
                         <div class="col-md-6">
-                            <div class="point-button-d">
+                            <div class="point-button b">
                                 <p>
                                     Line Fault
                                     (-1 point)
@@ -131,7 +131,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="point-button-d">
+                            <div class="point-button b">
                                 <p>
                                     Yellow Card
                                     (-1 point)
@@ -141,7 +141,7 @@
                     </div>
                     <div class="row gx-3 mt">
                         <div class="col-md-6">
-                            <div class="point-button-d">
+                            <div class="point-button b">
                                 <p>
                                     Red Card
                                     (Match Loss)
@@ -149,7 +149,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="point-button-d">
+                            <div class="point-button b">
                                 <p>
                                     Black Card
                                     (Disqualification)
@@ -164,14 +164,11 @@
         <!--  -->
         <div class="col-md-3">
             <!-- Match Details -->
-            <div class="card detail-section mb">
+            <div class="card mb">
                 <div class="card-body">
                     <h5 class="card-title">Match Details</h5>
                     <h6 class="card-title">Pool @Pool | Match @MatchCurrent / @MatchTotal</h6>
                     <p></p>
-                    <h6 class="card-title">Time remaining</h6>
-                    <div class="match-timer">@TimeRemaining</div>
-                    <p></p>
                     <h6 class="card-title">Winner</h6>
                     @if (F1_Health > F2_Health)
                     {
@@ -187,30 +184,34 @@
                     }
                 </div>
             </div>
-            <div class="card detail-section mt mb">
+            <!-- Time Remaining -->
+            <div class="card mt mb">
                 <div class="card-body">
-                    <h5 class="card-title">Time</h5>
-                    <p></p>
-                    <h6 class="card-title">Time remaining</h6>
-                    <div class="match-timer">@TimeRemaining</div>
-                    <p></p>
-                    <h6 class="card-title">Winner</h6>
-                    @if (F1_Health > F2_Health)
-                    {
-                        <div class="winner-indicator red">Red</div>
-                    }
-                    else if (F2_Health > F1_Health)
-                    {
-                        <div class="winner-indicator blue">Blue</div>
-                    }
-                    else
-                    {
-                        <div class="winner-indicator draw">Draw</div>
-                    }
+                    <h5 class="card-title mb">Time Remaining</h5>
+                    <div class="row gx-1 mb-2">
+                        <div class="col-md-2">
+                            <button type="button" class="timer-button">- 5</button>
+                        </div>
+                        <div class="col-md-8">
+                            <button type="button" class="match-timer">@TimeRemaining</button>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="timer-button">+ 5</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="timer-button">Reset</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="timer-button">Time Hold</button>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
             <!-- Upcoming Matches -->
-            <div class="card detail-section mt">
+            <div class="card mt">
                 <div class="card-body">
                     <h5 class="card-title">Upcoming Matches</h5>
                     <div class="upcoming-matches mt-3">
@@ -222,10 +223,13 @@
             </div>
         </div>
     </div>
-    <p></p>
+    <div style="height:25px"></div>
     <!-- Add Exchange -->
-    <div>
-        <button type="button" class="add-exchange">Add Exchange</button>
+    <div class="row">
+        <div class="col-md-0"></div>
+        <div class="col-md-8">
+            <button type="button" class="add-exchange">Add Exchange</button>
+        </div>
     </div>
     <div style="height:50px"></div>
     <!-- Point Deductions / Match Events -->
@@ -256,7 +260,7 @@
                 @foreach (var evt in TestEvents)
                 {
                     <div class="col-md-1">
-                        <div class="event-square square-red">
+                        <div class="event-square es-red">
                             <p>@evt.FighterOneReduction</p>
                         </div>
                     </div>
@@ -268,7 +272,7 @@
                 @foreach (var evt in TestEvents)
                 {
                     <div class="col-md-1">
-                        <div class="event-square square-blue">
+                        <div class="event-square es-blue">
                             <p>@evt.FighterTwoReduction</p>
                         </div>
                     </div>
@@ -282,23 +286,31 @@
 
 <style>
     .event-square {
-        position: relative; /* Needed for absolute positioning of the pseudo-element */
+        position: relative;
         text-align: center;
         border: 1px solid rgba(0,0,0,.125);
     }
 
     .event-square.disqualify {
-        position: relative; /* Needed for absolute positioning of the pseudo-element */
+        position: relative;
         text-align: center;
         border: 1px solid rgba(255,255,255,.5);
         background-color: rgba(0,0,0,.8);
         color: rgb(255, 255, 255);
     }
 
+    .event-square.es-red {
+        background-color: #ff6b6b;
+    }
+
+    .event-square.es-blue {
+        background-color: #0d6efd;
+    }
+
     .event-square::before {
         content: '';
         display: block;
-        padding-top: 100%; /* This creates a square aspect ratio */
+        padding-top: 100%;
     }
 
     .event-square > p {
@@ -311,32 +323,6 @@
 
     .event-container {
 
-    }
-
-    .square-red {
-        background-color: #ff6b6b;
-    }
-
-    .square-blue {
-        background-color: #0d6efd;
-    }
-
-    .point-square-d {
-        text-align: center;
-        color: #333;
-        border: 1px solid rgba(0,0,0,.125);
-        border-radius: .25rem;
-        padding-top: 1rem; /* Equal top and bottom padding */
-        padding-bottom: .5rem;
-    }
-
-    .point-square-r {
-        text-align: center;
-        color: #333;
-        border: 1px solid rgba(0,0,0,.125);
-        border-radius: .25rem;
-        padding-top: 1rem; /* Equal top and bottom padding */
-        padding-bottom: 1rem;
     }
 
     .card-title {
@@ -373,31 +359,45 @@
         font-size: 1rem;
     }
 
-    .bg-red {
-      background-color: #ff6b6b;
+    .f-red {
+      background-color: #dc3545; /* source of truth for red */
     }
 
-    .bg-blue {
-      background-color: #48a1ff;
+    .f-blue {
+      background-color: #0d6efd; /* source of truth for blue */
     }
 
     .match-detail {
       margin-bottom: 1rem;
     }
 
-    .match-timer,
     .winner-indicator,
     .add-exchange {
       padding: 0.75rem;
       text-align: center;
       color: #333;
-      margin: 0.25rem;
+      margin-left: 0.25rem;
+      margin-right: 0.25rem;
       border: 1px solid rgba(0,0,0,.125);
       border-radius: .25rem
     }
 
+    /* Time remaining box items*/
+    .match-timer,
+    .timer-button {
+        width: 100%;
+        padding: .75rem;
+        text-align: center;
+        border: 1px solid rgba(0,0,0,.25);
+        border-radius: .25rem;
+    }
+
     .match-timer {
-      background-color: #ffe66d;
+        background-color: #ffe66d;
+    }
+
+    .timer-button {
+        background-color: white;
     }
 
     .winner-indicator {
@@ -408,7 +408,7 @@
          background-color: #ff6b6b;
     }
 
-    .winner-indicator.blue{
+    .winner-indicator.blue {
         background-color: #48a1ff;
     }
 
@@ -418,6 +418,7 @@
 
     .add-exchange {
         background-color: rgba(0,175,0,.3);
+        width: 100%;
     }
 
     .back-home {
@@ -434,64 +435,46 @@
         color: black;
     }
 
-    .point-button-d {
+    .point-button {
         text-align: center;
-        background-color: white;
         border: 1px solid black;
         border-radius: .25rem;
         padding: 1rem;
+        background-color: white;
     }
 
-    .point-button-d:hover {
-        border-color: #dc3545;
-        color: #dc3545;
+    .point-button.r:hover {
+        background-color: #f09aa2;
     }
 
-    .point-button-d-pressed {
-        text-align: center;
-        background-color: #dc3545;
-        border: 1px solid #dc3545;
-        border-radius: .25rem;
-        padding: 1rem;
+    .point-button.b:hover {
+        background-color: #93b3e1;
         color: white;
     }
 
-    .point-button-r {
+    .point-button-pressed {
         text-align: center;
-        background-color: white;
         border: 1px solid black;
         border-radius: .25rem;
         padding: 1rem;
+        background-color: white;
     }
 
-    .point-button-r:hover {
-        border-color: #0d6efd;
-        color: #0d6efd;
+    .point-button-pressed.r {
+        background-color: #dc3545;
+        color: white;
     }
 
-    .point-button-r-pressed {
-        text-align: center;
+    .point-button-pressed.b {
         background-color: #0d6efd;
-        border: 1px solid #0d6efd;
-        border-radius: .25rem;
-        padding: 1rem;
         color: white;
     }
 
     .upcoming-matches {
       padding: 0.5rem 1rem;
-      background-color: #f8f9fa;
+      background-color: white;
       border: 1px solid #ddd;
       margin-top: 1rem;
-    }
-
-    .upcoming-match {
-      padding: 0.25rem 0;
-    }
-
-    .detail-section {
-        padding-left: 0; /* Remove padding for tight alignment */
-        padding-right: 0; /* Remove padding for tight alignment */
     }
 
     .mb {
