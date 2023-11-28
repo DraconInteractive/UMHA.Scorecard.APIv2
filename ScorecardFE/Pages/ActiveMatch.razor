@@ -187,6 +187,28 @@
                     }
                 </div>
             </div>
+            <div class="card detail-section mt mb">
+                <div class="card-body">
+                    <h5 class="card-title">Time</h5>
+                    <p></p>
+                    <h6 class="card-title">Time remaining</h6>
+                    <div class="match-timer">@TimeRemaining</div>
+                    <p></p>
+                    <h6 class="card-title">Winner</h6>
+                    @if (F1_Health > F2_Health)
+                    {
+                        <div class="winner-indicator red">Red</div>
+                    }
+                    else if (F2_Health > F1_Health)
+                    {
+                        <div class="winner-indicator blue">Blue</div>
+                    }
+                    else
+                    {
+                        <div class="winner-indicator draw">Draw</div>
+                    }
+                </div>
+            </div>
             <!-- Upcoming Matches -->
             <div class="card detail-section mt">
                 <div class="card-body">
@@ -395,7 +417,7 @@
     }
 
     .add-exchange {
-      background-color: #28a745;
+        background-color: rgba(0,175,0,.3);
     }
 
     .back-home {
