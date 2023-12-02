@@ -17,63 +17,76 @@
     </div>
 
     <div class="row gx-5">
-        <!-- Competitor 1 -->
-        <div class="col-md-4 mb-3">
-            <!-- Score -->
-            <div class="card mb">
-                <div class="card-header card-header-custom f-red text-white">
-                    @F1_Name
-                </div>
-                <div class="card-body card-body-custom">
-                    <div class="score">@F1_Health</div>
-                </div>
-            </div>
+        <!-- Competitor Column -->
+        <div class="col-md-8">
+            <div class="row">
+                <!-- Competitor 1 -->
+                <div class="col-md-6 mb-3">
+                    <!-- Score -->
+                    <div class="card">
+                        <div class="card-header card-header-custom f-red text-white">
+                            @F1_Name
+                        </div>
+                        <div class="card-body card-body-custom">
+                            <div class="score">@F1_Health</div>
+                        </div>
+                    </div>
 
-            <!-- Points -->
-            <div class="card">
-                <div class="card-body card-body-custom">
-                    <h5 class="card-title">Points</h5>
-                    <div style="height:10px"></div>
-                    <ScorecardFE.Components.ActiveMatch.PointButtons @ref="redPoints"/>
-                    <div style="height:10px"></div>
-                    <h5 class="card-title">Warnings & Penalties</h5>
-                    <div style="height:15px"></div>
-                    <ScorecardFE.Components.ActiveMatch.PenaltyButtons @ref="redPenalties"/>
-                </div>
-            </div>
-        </div>
-        <!-- Competitor 2 -->
-        <div class="col-md-4 mb-3">
-            <!-- Score -->
-            <div class="card mb">
-                <div class="card-header card-header-custom f-blue text-white">
-                    @F2_Name
-                </div>
-                <div class="card-body card-body-custom">
-                    <div class="score">@F2_Health</div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body card-body-custom">
-                    <h5 class="card-title">Points</h5>
-                    <div style="height:10px"></div>
-                    <ScorecardFE.Components.ActiveMatch.PointButtons @ref="bluePoints" />
-                    <div style="height:10px"></div>
-                    <h5 class="card-title">Warnings & Penalties</h5>
-                    <div style="height:15px"></div>
-                    <ScorecardFE.Components.ActiveMatch.PenaltyButtons @ref="bluePenalties" />
-                </div>
-            </div>
-        </div>
+                    <div style="height:1.5vh" />
 
-        <!--  -->
+                    <!-- Points -->
+                    <div class="card">
+                        <div class="card-body card-body-custom">
+                            <h5 class="card-title">Points</h5>
+                            <div style="height:10px"></div>
+                            <ScorecardFE.Components.ActiveMatch.PointButtons @ref="redPoints" />
+                            <div style="height:10px"></div>
+                            <h5 class="card-title">Warnings & Penalties</h5>
+                            <div style="height:15px"></div>
+                            <ScorecardFE.Components.ActiveMatch.PenaltyButtons @ref="redPenalties" />
+                        </div>
+                    </div>
+                </div>
+                <!-- Competitor 2 -->
+                <div class="col-md-6 mb-3">
+                    <!-- Score -->
+                    <div class="card">
+                        <div class="card-header card-header-custom f-blue text-white">
+                            @F2_Name
+                        </div>
+                        <div class="card-body card-body-custom">
+                            <div class="score">@F2_Health</div>
+                        </div>
+                    </div>
+
+                     <div style="height:1.5vh" />
+
+                    <!-- Points -->
+                    <div class="card">
+                        <div class="card-body card-body-custom">
+                            <h5 class="card-title">Points</h5>
+                            <div style="height:10px"></div>
+                            <ScorecardFE.Components.ActiveMatch.PointButtons @ref="bluePoints" />
+                            <div style="height:10px"></div>
+                            <h5 class="card-title">Warnings & Penalties</h5>
+                            <div style="height:15px"></div>
+                            <ScorecardFE.Components.ActiveMatch.PenaltyButtons @ref="bluePenalties" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Add Exchange -->
+            <button type="button" @onclick="() => AddEvent()" class="add-exchange">Add Exchange</button>
+        </div>
+ 
+        <!-- Detail Column -->
         <div class="col-md-3">
             <!-- Match Details -->
             <div class="card mb">
                 <div class="card-body">
                     <h5 class="card-title">Match Details</h5>
                     <h6 class="card-title">Pool @Pool | Match @MatchCurrent / @MatchTotal</h6>
-                    <p></p>
+                    <div style="height: 3.25vh;" />
                     <h6 class="card-title">Winner</h6>
                     @if (F1_Health > F2_Health)
                     {
@@ -119,19 +132,11 @@
             </div>
         </div>
     </div>
-    <div style="height:25px"></div>
-    <!-- Add Exchange -->
-    <div class="row">
-        <div class="col-md-0"></div>
-        <div class="col-md-8">
-            <button type="button" @onclick="() => AddEvent()" class="add-exchange">Add Exchange</button>
-        </div>
-    </div>
+
     <div style="height:50px"></div>
     <!-- Point Deductions / Match Events -->
     <h5>Match Events</h5>
     <div style="height:10px"></div>
-    <p>Number of events: @TestEvents.Count</p>
     <div class="card c-border-dark">
         <div class="card-body row">
             @foreach (var evt in TestEvents)
