@@ -2,8 +2,11 @@
 @using Newtonsoft.Json;
 @using ScorecardAPI.Models;
 @using ScorecardAPI.Models.DTO;
+@using ScorecardFE.Components
+@using ScorecardFE.Services
 @using static ScorecardFE.Program;
 @inject DataTransferService dataTransfer;
+@inject ScreenDataService screenData;
 @inject HttpClient Http;
 @inject NavigationManager Nav;
 
@@ -31,59 +34,11 @@
                 <div class="card-body card-body-custom">
                     <h5 class="card-title">Points</h5>
                     <div style="height:10px"></div>
-                    <div class="row gx-4 mb">
-                        <div class="col-md-3">
-                            <button type="button" class="point-button-pressed r">— 1</button>
-                        </div>
-                        <div class="col-md-3">
-                            <button type="button" class="point-button r">— 2</button>
-                        </div>
-                        <div class="col-md-3">
-                            <button type="button" class="point-button r">— 3</button>
-                        </div>
-                        <div class="col-md-3">
-                            <button type="button" class="point-button r">— 4</button>
-                        </div>
-                    </div>
+                    <ScorecardFE.Components.ActiveMatch.PointButtons @ref="redPoints"/>
                     <div style="height:10px"></div>
                     <h5 class="card-title">Warnings & Penalties</h5>
-                    <div style="height:10px"></div>
-                    <div class="row gx-3">
-                        <div class="col-md-6">
-                            <div class="point-button r">
-                                <p>
-                                    Line Fault
-                                    (-1 point)
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="point-button r">
-                                <p>
-                                    Yellow Card
-                                    (-1 point)
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row gx-3 mt">
-                        <div class="col-md-6">
-                            <div class="point-button r">
-                                <p>
-                                    Red Card
-                                    (Match Loss)
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="point-button r">
-                                <p>
-                                    Black Card
-                                    (Disqualification)
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    <div style="height:15px"></div>
+                    <ScorecardFE.Components.ActiveMatch.PenaltyButtons @ref="redPenalties"/>
                 </div>
             </div>
         </div>
@@ -98,65 +53,15 @@
                     <div class="score">@F2_Health</div>
                 </div>
             </div>
-
-            <!-- Points -->
             <div class="card">
                 <div class="card-body card-body-custom">
                     <h5 class="card-title">Points</h5>
                     <div style="height:10px"></div>
-                    <div class="row gx-4 mb">
-                        <div class="col-md-3">
-                            <button type="button" class="point-button-pressed b">— 1</button>
-                        </div>
-                        <div class="col-md-3">
-                            <button type="button" class="point-button b">— 2</button>
-                        </div>
-                        <div class="col-md-3">
-                            <button type="button" class="point-button b">— 3</button>
-                        </div>
-                        <div class="col-md-3">
-                            <button type="button" class="point-button b">— 4</button>
-                        </div>
-                    </div>
+                    <ScorecardFE.Components.ActiveMatch.PointButtons @ref="bluePoints" />
                     <div style="height:10px"></div>
                     <h5 class="card-title">Warnings & Penalties</h5>
-                    <div style="height:10px"></div>
-                    <div class="row gx-3">
-                        <div class="col-md-6">
-                            <div class="point-button b">
-                                <p>
-                                    Line Fault
-                                    (-1 point)
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="point-button b">
-                                <p>
-                                    Yellow Card
-                                    (-1 point)
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row gx-3 mt">
-                        <div class="col-md-6">
-                            <div class="point-button b">
-                                <p>
-                                    Red Card
-                                    (Match Loss)
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="point-button b">
-                                <p>
-                                    Black Card
-                                    (Disqualification)
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    <div style="height:15px"></div>
+                    <ScorecardFE.Components.ActiveMatch.PenaltyButtons @ref="bluePenalties" />
                 </div>
             </div>
         </div>
@@ -188,7 +93,7 @@
             <div class="card mt mb">
                 <div class="card-body">
                     <h5 class="card-title mb">Time Remaining</h5>
-                    <div class="row gx-1 mb-2">
+                    <div class="row gx-4">
                         <div class="col-md-2">
                             <button type="button" class="timer-button">- 5</button>
                         </div>
@@ -201,10 +106,10 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <button type="button" class="timer-button">Reset</button>
+                            <button type="button" class="timer-button long">Reset</button>
                         </div>
                         <div class="col-md-6">
-                            <button type="button" class="timer-button">Time Hold</button>
+                            <button type="button" class="timer-button long">Time Hold</button>
                         </div>
                     </div>
                     
@@ -228,101 +133,57 @@
     <div class="row">
         <div class="col-md-0"></div>
         <div class="col-md-8">
-            <button type="button" class="add-exchange">Add Exchange</button>
+            <button type="button" @onclick="() => AddEvent()" class="add-exchange">Add Exchange</button>
         </div>
     </div>
     <div style="height:50px"></div>
     <!-- Point Deductions / Match Events -->
-    <h5>History</h5>
+    <h5>Match Events</h5>
     <div style="height:10px"></div>
-    <div class="card event-container">
-        <div class="col-md-6">
-            <div class="row gx-1">
-                @foreach (var evt in TestEvents)
-                {
-                    var dEvt = MatchEventDisplay.FromMatchEvent(evt);
-                    <div class="col-md-1">
-                        <div class="col-md-6 offset-md-3">
-                            <div class="@dEvt.Style">
-                                <p>@dEvt.Type</p>
-                            </div>
-                        </div>
-                    </div>
-                }
-                @for (int i = 0; i < 12; i++)
-                {
-                    
-                }
-            </div>
-        </div>
-        <div class="col-md-6 mtp">
-            <div class="row gx-1">
-                @foreach (var evt in TestEvents)
-                {
-                    <div class="col-md-1">
-                        <div class="event-square es-red">
-                            <p>@evt.FighterOneReduction</p>
-                        </div>
-                    </div>
-                }
-            </div>
-        </div>
-        <div class="col-md-6 mtp">
-            <div class="row gx-1">
-                @foreach (var evt in TestEvents)
-                {
-                    <div class="col-md-1">
-                        <div class="event-square es-blue">
-                            <p>@evt.FighterTwoReduction</p>
-                        </div>
-                    </div>
-                }
-            </div>
+    <p>Number of events: @TestEvents.Count</p>
+    <div class="card c-border-dark">
+        <div class="card-body row">
+            @foreach (var evt in TestEvents)
+            {
+                <ScorecardFE.Components.ActiveMatch.Event MatchEvent="evt"/>
+            }
         </div>
     </div>  
     <div style="height:50px"></div>
+
+    <div style="height:50px"></div>
+    <!-- Modal, currently hidden -->
+
+    <div style="display:block">
+        <Modal @ref="modal"></Modal>
+        <button style="width: 100%" @onclick="() => ToggleModal(true)">Open Modal</button>
+    </div>
+
+    <div style="height:50px"></div>
+
 </div>
 
+<div class="card">
+    <h5 class="card-header">Notes</h5>
+    <p class="card-body" style="white-space: pre-wrap">
+        - Add option to clear last exchange
+        - Remove point association with penalties
+        - Add start / stop buttons for matches
+        - Auto stop match on no health or time out
+        - Add tournament setup rule for whether points can go negative
+        - Display event time as seconds from match start
+        - Track doubles (where a double is a strike event where both fighters have health reductions)
+        Regarding tournament generation
+        - Add / Remove people from pools and regenerate
+    </p>
+</div>
+
+<div style="height:50px"></div>
 
 <style>
-    .event-square {
-        position: relative;
-        text-align: center;
-        border: 1px solid rgba(0,0,0,.125);
-    }
-
-    .event-square.disqualify {
-        position: relative;
-        text-align: center;
-        border: 1px solid rgba(255,255,255,.5);
-        background-color: rgba(0,0,0,.8);
-        color: rgb(255, 255, 255);
-    }
-
-    .event-square.es-red {
-        background-color: #ff6b6b;
-    }
-
-    .event-square.es-blue {
-        background-color: #0d6efd;
-    }
-
-    .event-square::before {
-        content: '';
-        display: block;
-        padding-top: 100%;
-    }
-
-    .event-square > p {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+    .card {
         margin: 0;
-    }
-
-    .event-container {
-
+        padding: 0;
     }
 
     .card-title {
@@ -340,6 +201,12 @@
     .card-body {
         background-color: #f8f9fa;
         color: #333;
+        margin: 0; /* Remove margin */
+        padding: 1rem; /* Add padding to inner card-body */
+    }
+
+    .card-body .event-fighter {
+        text-align: center;
     }
 
     .card-body-custom {
@@ -367,6 +234,18 @@
       background-color: #0d6efd; /* source of truth for blue */
     }
 
+    .f-border-red {
+        border-color: #dc3545;
+    }
+
+    .f-border-blue {
+        border-color: #0d6efd;
+    }
+
+    .c-border-dark {
+        border-color: #333;
+    }
+
     .match-detail {
       margin-bottom: 1rem;
     }
@@ -385,23 +264,28 @@
     /* Time remaining box items*/
     .match-timer,
     .timer-button {
-        width: 100%;
-        padding: .75rem;
         text-align: center;
         border: 1px solid rgba(0,0,0,.25);
         border-radius: .25rem;
+        height: 3vw;
     }
 
     .match-timer {
         background-color: #ffe66d;
+        width: 6vw;
     }
 
     .timer-button {
         background-color: white;
+        width: 3vw;
+    }
+
+    .timer-button.long{
+        width: 7vw;
     }
 
     .winner-indicator {
-      background-color: #ff6b6b;
+        background-color: white;
     }
 
     .winner-indicator.red {
@@ -417,7 +301,7 @@
     }
 
     .add-exchange {
-        background-color: rgba(0,175,0,.3);
+        background-color: rgba(0,175,0,.4);
         width: 100%;
     }
 
@@ -433,41 +317,6 @@
 
     .back-home:hover {
         color: black;
-    }
-
-    .point-button {
-        text-align: center;
-        border: 1px solid black;
-        border-radius: .25rem;
-        padding: 1rem;
-        background-color: white;
-    }
-
-    .point-button.r:hover {
-        background-color: #f09aa2;
-    }
-
-    .point-button.b:hover {
-        background-color: #93b3e1;
-        color: white;
-    }
-
-    .point-button-pressed {
-        text-align: center;
-        border: 1px solid black;
-        border-radius: .25rem;
-        padding: 1rem;
-        background-color: white;
-    }
-
-    .point-button-pressed.r {
-        background-color: #dc3545;
-        color: white;
-    }
-
-    .point-button-pressed.b {
-        background-color: #0d6efd;
-        color: white;
     }
 
     .upcoming-matches {
@@ -507,6 +356,15 @@
     public string Upcoming1, Upcoming2;
     public List<MatchEvent> TestEvents;
     private int evtCounter = 0;
+
+    private Modal modal;
+    private bool showModal;
+
+    private Components.ActiveMatch.Event matchEvent01;
+
+    private Components.ActiveMatch.PointButtons redPoints, bluePoints;
+    private Components.ActiveMatch.PenaltyButtons redPenalties, bluePenalties;
+
     protected override async Task OnInitializedAsync()
     {
         F1_Health = 10;
@@ -519,8 +377,15 @@
         F1_Name = "Lee North";
         F2_Name = "Peter Carey";
         TestEvents = new List<MatchEvent>();
+
+        screenData.RegisterData("ActiveMatch", "ShowModal", new ScreenData_Bool() { Value = false });
         await FetchData();
+
+
         StateHasChanged();
+
+
+        SetupPointsAndPenalties();
 
         Demo();
         await Refresh();
@@ -572,18 +437,6 @@
                 break;
         }
 
-        TestEvents.Add(new MatchEvent()
-            {
-                EventType = eType,
-                FighterOneReduction = 1,
-                FighterTwoReduction = 1,
-            });
-
-        if (TestEvents.Count > 10)
-        {
-            TestEvents.Clear();
-        }
-
         StateHasChanged();
 
         await Task.Delay(2000);
@@ -601,40 +454,59 @@
         dataTransfer.Tournaments = tournaments;
     }
 
-    public class MatchEventDisplay
+    public void AddEvent ()
     {
-        public string Type;
-        public string Style;
-        public int F1;
-        public int F2;
-
-        public static MatchEventDisplay FromMatchEvent (MatchEvent evt)
+        if (TestEvents.Count > 4)
         {
-            string type = "S";
-            string style = "event-square";
-
-            switch (evt.EventType)
-            {
-                case "Strike":
-                    break;
-                case "Penalty":
-                    type = "P";
-                    break;
-                case "Disqualification":
-                    type = "D";
-                    style = "event-square disqualify";
-                    break;
-            }
-
-            MatchEventDisplay med = new MatchEventDisplay()
-            {
-                Type = type,
-                Style = style,
-                F1 = evt.FighterOneReduction,
-                F2 = evt.FighterTwoReduction
-            };
-
-            return med;
+            TestEvents.Clear();
+            StateHasChanged();
         }
+
+        int redPoint = redPoints.Value();
+        int bluePoint = bluePoints.Value();
+        string redEvt = redPenalties.Value();
+        string blueEvt = bluePenalties.Value();
+
+        bool redPenalty = redEvt != "Strike";
+        bool bluePenalty = blueEvt != "Strike";
+
+        // I think events need to not have a single type, but essentially two events - one for red one for blue
+        string evt = redPenalty ? redEvt : bluePenalty ? blueEvt : "Strike";
+        TestEvents.Add(new MatchEvent()
+        {
+            EventType = evt,
+            FighterOneReduction = redPoint,
+            FighterTwoReduction = bluePoint,
+        });
+
+        redPoints.ToggleButton(-1);
+        bluePoints.ToggleButton(-1);
+        redPenalties.ToggleButton(-1);
+        bluePenalties.ToggleButton(-1);
+
+        StateHasChanged();
+    }
+
+    public void ToggleModal (bool state)
+    {
+        if (modal != null)
+        {
+            modal.Toggle(state);
+        }
+        StateHasChanged();
+    }
+
+    public async Task SetupPointsAndPenalties ()
+    {
+        while (redPoints == null || bluePoints == null || redPenalties == null || bluePenalties == null)
+        {
+            await Task.Delay(50);
+        }
+
+        redPoints.SetTeam(true);
+        bluePoints.SetTeam(false);
+        redPenalties.SetTeam(true);
+        bluePenalties.SetTeam(false);
+        StateHasChanged();
     }
 }

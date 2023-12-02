@@ -1,0 +1,31 @@
+﻿@using ScorecardAPI.Models
+
+@if (MatchEvent != null)
+{
+    <div class="card c-border-dark col-md-2 m-4">
+        <div class="card-header c-border-dark">
+            <h5 class="card-title">@MatchEvent.EventType</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="card f-border-red col-md-5 m-2">
+                    <div class="card-body event-fighter">
+                        @MatchEvent.FighterOneReduction
+                    </div>
+                </div>
+                <div class="card f-border-blue col-md-5 m-2">
+                    <div class="card-body event-fighter">
+                        @MatchEvent.FighterTwoReduction
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public MatchEvent? MatchEvent { get; set; }
+
+}

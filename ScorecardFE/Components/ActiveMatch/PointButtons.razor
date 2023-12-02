@@ -1,0 +1,95 @@
+﻿<div class="row gx-4 mb" style="height: 50%">
+    <div class="col-md-3">
+        <button type="button" class="point-button @Style(0)" @onclick="() => ToggleButton(0)">1</button>
+    </div>
+    <div class="col-md-3">
+        <button type="button" class="point-button @Style(1)" @onclick="() => ToggleButton(1)">2</button>
+    </div>
+    <div class="col-md-3">
+        <button type="button" class="point-button @Style(2)" @onclick="() => ToggleButton(2)">3</button>
+    </div>
+    <div class="col-md-3">
+        <button type="button" class="point-button @Style(3)" @onclick="() => ToggleButton(3)">4</button>
+    </div>
+</div>
+
+<style>
+    .point-button {
+        text-align: center;
+        border: 1px solid black;
+        border-radius: .25rem;
+        width: 3vw;
+        height: 3vw;
+        background-color: white;
+        color: #333;
+    }
+
+    .point-button.r:hover{
+        background-color: #f09aa2;
+    }
+
+    .point-button.r.pressed {
+        background-color:#dc3545;
+        color: white;
+    }
+
+    .point-button.b:hover {
+        background-color: #88bbee;
+    }
+
+    .point-button.b.pressed {
+        background-color: #3591ee;
+        color:white;
+    }
+
+</style>
+
+@code {
+    private int buttonCount = 4;
+    private bool[] buttonStates = new bool[4];
+
+    private bool _isRed;
+    public void SetTeam (bool isRed)
+    {
+        _isRed = isRed;
+    }
+
+    public void ToggleButton(int index)
+    {
+        if (index != -1 && buttonStates[index]) // If you selected an already selected button, deselect it
+        {
+            index = -1;
+        }
+
+        for (int i = 0; i < buttonCount; i++)
+        {
+            buttonStates[i] = i == index;
+        }
+
+        StateHasChanged();
+    }
+
+    private string Style (int index)
+    {
+        string baseStr = _isRed ? "r" : "b";
+        if (buttonStates[index])
+        {
+            baseStr += " pressed";
+        }
+        return baseStr;
+    }
+
+    public int Value()
+    {
+        int[] map = new int[4] { 1, 2, 3, 4 };
+        // horrible
+        for (int i = 0; i < 4; i++)
+        {
+            if (buttonStates[i])
+            {
+                return map[i];
+            }
+        }
+        return 0;
+    }
+}

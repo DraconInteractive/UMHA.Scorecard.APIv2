@@ -1,0 +1,69 @@
+﻿<div class="@Visible">
+    <div class="modal-overlay">
+        <div class="modal-content">
+            <p>
+This is modal multi-line content.
+See?
+            </p>
+            <button type="button" class="btn btn-sm btn-secondary width-25" @onclick="() => Toggle(false)">Close</button>
+            <div style="height: 25px"></div>
+        </div>
+    </div>
+</div>
+
+<style>
+    
+    .modal,
+    .modal-hidden {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .modal {
+        display:block;
+    }
+
+    .modal-hidden {
+        display:none;
+    }
+
+    .modal-overlay {
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.75);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: white;
+        text-align: center;
+        width: 50%;
+    }
+
+    .modal-content > p {
+        white-space: pre-wrap; /* Use 'pre-wrap' to allow text to wrap */
+        display: block;
+        margin: 0 auto;
+    }
+
+    .width-25 {
+        width: 25%;
+        margin: 0 auto;
+    }
+</style>
+
+@code {
+    private bool isVisible;
+    public void Toggle (bool state)
+    {
+        isVisible = state;
+        StateHasChanged();
+    }
+
+    public string Visible => isVisible ? "modal" : "modal-hidden";
+}
