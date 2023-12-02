@@ -13,7 +13,7 @@
 <!-- Needs: Timer button -->
 <div class="container-fluid mt-3">
     <div class="mb-2">
-        <button type="button" class="back-home">Back to Match List</button>
+        <button type="button" class="back-home" @onclick="() => ToggleModal(true, backModalMessage)">Back to Match List</button>
     </div>
 
     <div class="row gx-5">
@@ -90,29 +90,20 @@
                 </div>
             </div>
             <!-- Time Remaining -->
-            <div class="card mt mb">
+            <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title mb">Time Remaining</h5>
-                    <div class="row gx-4">
-                        <div class="col-md-2">
-                            <button type="button" class="timer-button">- 5</button>
-                        </div>
-                        <div class="col-md-8">
-                            <button type="button" class="match-timer">@TimeRemaining</button>
-                        </div>
-                        <div class="col-md-2">
-                            <button type="button" class="timer-button">+ 5</button>
-                        </div>
+                    <h5 class="card-title">Time Remaining</h5>
+                    <div style="height: 1vh" />
+                    <div class="d-flex justify-content-between align-items-center">
+                        <button type="button" class="btn timer-button">-5</button>
+                        <button type="button" class="btn match-timer">@TimeRemaining</button>
+                        <button type="button" class="btn timer-button">+5</button>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <button type="button" class="timer-button long">Reset</button>
-                        </div>
-                        <div class="col-md-6">
-                            <button type="button" class="timer-button long">Time Hold</button>
-                        </div>
+                    <div style="height: 1.5vh" />
+                    <div class="d-flex justify-content-between align-items-center">
+                        <button type="button" class="btn timer-button long">Reset</button>
+                        <button type="button" class="btn timer-button long">Time Hold</button>
                     </div>
-                    
                 </div>
             </div>
             <!-- Upcoming Matches -->
@@ -145,7 +136,7 @@
         <div class="card-body row">
             @foreach (var evt in TestEvents)
             {
-                <ScorecardFE.Components.ActiveMatch.Event MatchEvent="evt"/>
+                <ScorecardFE.Components.ActiveMatch.Event MatchEvent="evt" OnRemove="(e) => RemoveEvent(e)"/>
             }
         </div>
     </div>  
@@ -156,7 +147,7 @@
 
     <div style="display:block">
         <Modal @ref="modal"></Modal>
-        <button style="width: 100%" @onclick="() => ToggleModal(true)">Open Modal</button>
+        <button style="width: 100%" @onclick="() => ToggleModal(true, modalTestMessage)">Open Modal</button>
     </div>
 
     <div style="height:50px"></div>
@@ -166,8 +157,9 @@
 <div class="card">
     <h5 class="card-header">Notes</h5>
     <p class="card-body" style="white-space: pre-wrap">
-        - Add option to clear last exchange
-        - Remove point association with penalties
+        - Add option to clear last exchange (done)
+        - Remove point association with penalties (done)
+        - Fix the timer area
         - Add start / stop buttons for matches
         - Auto stop match on no health or time out
         - Add tournament setup rule for whether points can go negative
@@ -267,21 +259,23 @@
         text-align: center;
         border: 1px solid rgba(0,0,0,.25);
         border-radius: .25rem;
-        height: 3vw;
+        height: 100%;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
     }
 
     .match-timer {
         background-color: #ffe66d;
-        width: 6vw;
+        width: 100%;
     }
 
     .timer-button {
         background-color: white;
-        width: 3vw;
+        width:25%;
     }
 
     .timer-button.long{
-        width: 7vw;
+        width: 50%;
     }
 
     .winner-indicator {
@@ -359,8 +353,8 @@
 
     private Modal modal;
     private bool showModal;
-
-    private Components.ActiveMatch.Event matchEvent01;
+    private string modalTestMessage = "This is hopefully multi-line content.<br />Like this! ";
+    private string backModalMessage = "This isn't available yet, soon though!";
 
     private Components.ActiveMatch.PointButtons redPoints, bluePoints;
     private Components.ActiveMatch.PenaltyButtons redPenalties, bluePenalties;
@@ -381,9 +375,7 @@
         screenData.RegisterData("ActiveMatch", "ShowModal", new ScreenData_Bool() { Value = false });
         await FetchData();
 
-
         StateHasChanged();
-
 
         SetupPointsAndPenalties();
 
@@ -487,11 +479,20 @@
         StateHasChanged();
     }
 
-    public void ToggleModal (bool state)
+    public void RemoveEvent(MatchEvent evt)
+    {
+        if (TestEvents.Contains(evt))
+        {
+            TestEvents.Remove(evt);
+        }
+        StateHasChanged();
+    }
+
+    public void ToggleModal (bool state, string message)
     {
         if (modal != null)
         {
-            modal.Toggle(state);
+            modal.Toggle(state, message);
         }
         StateHasChanged();
     }

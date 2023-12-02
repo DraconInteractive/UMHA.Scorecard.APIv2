@@ -1,12 +1,11 @@
 ﻿<div class="@Visible">
     <div class="modal-overlay">
         <div class="modal-content">
-            <p>
-This is modal multi-line content.
-See?
-            </p>
+            <div style="height: 2vh"></div>
+            <p>@(new MarkupString(message))</p>
+            <div style="height: 1vh"></div>
             <button type="button" class="btn btn-sm btn-secondary width-25" @onclick="() => Toggle(false)">Close</button>
-            <div style="height: 25px"></div>
+            <div style="height: 3vh"></div>
         </div>
     </div>
 </div>
@@ -59,9 +58,12 @@ See?
 
 @code {
     private bool isVisible;
-    public void Toggle (bool state)
+    private string message = "Test.<br />Test2";
+    public void Toggle (bool state, string msg = "")
     {
         isVisible = state;
+        message = msg;
+        //message = "Test.<br />Test2";
         StateHasChanged();
     }
 
