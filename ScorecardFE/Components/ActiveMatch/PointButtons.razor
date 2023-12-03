@@ -22,6 +22,7 @@
         height: 3vw;
         background-color: white;
         color: #333;
+        font-size: 1rem;
     }
 
     .point-button.r:hover{
@@ -42,6 +43,25 @@
         color:white;
     }
 
+    @@media screen and (max-width: 900px) {
+        .point-button {
+            font-size: 0.9rem; /* adjust as needed */
+        }
+    }
+
+    /* Smaller text size for smaller screens */
+    @@media screen and (max-width: 768px) {
+        .point-button {
+            font-size: 0.75rem; /* adjust as needed */
+        }
+    }
+
+    /* Even smaller text size for very small screens */
+    @@media screen and (max-width: 480px) {
+        .point-button {
+            font-size: 0.6rem; /* adjust as needed */
+        }
+    }
 </style>
 
 @code {

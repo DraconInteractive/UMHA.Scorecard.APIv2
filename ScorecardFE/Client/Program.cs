@@ -28,7 +28,7 @@ namespace ScorecardFE
 
         public class DataTransferService
         {
-            public User? targetUser { get; set; }
+            public User? TargetUser { get; set; }
             public User[]? Users { get; set; }
             public TournamentOutputDTO[]? Tournaments { get; set; }
         }

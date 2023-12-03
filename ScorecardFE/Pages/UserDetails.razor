@@ -36,7 +36,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         statusText = "Loading...";
-        currentUser = dataTransfer.targetUser;
+        currentUser = dataTransfer.TargetUser;
 
         await FetchData();
         StateHasChanged();
@@ -74,7 +74,7 @@ else
             }
 
             currentUser = dataTransfer.Users.FirstOrDefault(u => u.UserId == parsedID);
-            dataTransfer.targetUser = currentUser;
+            dataTransfer.TargetUser = currentUser;
 
             string tournamentJson = await Http.GetStringAsync($"api/tournament");
             tournaments = JsonConvert.DeserializeObject<TournamentOutputDTO[]>(tournamentJson);

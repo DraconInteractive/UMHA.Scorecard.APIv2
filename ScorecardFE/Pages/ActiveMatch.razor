@@ -18,7 +18,7 @@
 
     <div class="row gx-5">
         <!-- Competitor Column -->
-        <div class="col-md-8">
+        <div class="col-lg-8 col-md-12 mb-3">
             <div class="row">
                 <!-- Competitor 1 -->
                 <div class="col-md-6 mb-3">
@@ -80,7 +80,7 @@
         </div>
  
         <!-- Detail Column -->
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-12">
             <!-- Match Details -->
             <div class="card mb">
                 <div class="card-body">
@@ -109,7 +109,7 @@
                     <div style="height: 1vh" />
                     <div class="d-flex justify-content-between align-items-center">
                         <button type="button" class="btn timer-button">-5</button>
-                        <button type="button" class="btn match-timer">@TimeRemaining</button>
+                        <button type="button" class="btn match-timer" onclick="() => ToggleTimer()">@TimerStr</button>
                         <button type="button" class="btn timer-button">+5</button>
                     </div>
                     <div style="height: 1.5vh" />
@@ -130,6 +130,13 @@
                     </div>
                 </div>
             </div>
+            <!-- Debug -->
+            <div class="card mt">
+                <div class="card-body d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary mt-2 mb-2">Debug: Setup From Match</button>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -137,14 +144,18 @@
     <!-- Point Deductions / Match Events -->
     <h5>Match Events</h5>
     <div style="height:10px"></div>
+    <!-- Events Container -->
     <div class="card c-border-dark">
-        <div class="card-body row">
-            @foreach (var evt in TestEvents)
-            {
-                <ScorecardFE.Components.ActiveMatch.Event MatchEvent="evt" OnRemove="(e) => RemoveEvent(e)"/>
-            }
+        <div class="card-body event-container p-2">
+            <div class="row">
+                @foreach (var evt in TestEvents)
+                {
+                    <ScorecardFE.Components.ActiveMatch.Event MatchEvent="evt" OnRemove="(e) => RemoveEvent(e)" />
+                }
+            </div>
         </div>
-    </div>  
+    </div>
+
     <div style="height:50px"></div>
 
     <div style="height:50px"></div>
@@ -159,12 +170,13 @@
 
 </div>
 
-<div class="card">
+<div class="card mt-3">
     <h5 class="card-header">Notes</h5>
     <p class="card-body" style="white-space: pre-wrap">
         - Add option to clear last exchange (done)
         - Remove point association with penalties (done)
-        - Fix the timer area
+        - Fix the timer area (done)
+        - Start implementing 'setup from match', instead of purely dynamic variables
         - Add start / stop buttons for matches
         - Auto stop match on no health or time out
         - Add tournament setup rule for whether points can go negative
@@ -325,6 +337,11 @@
       margin-top: 1rem;
     }
 
+    .event-container {
+        overflow-y: auto;
+        max-height: 60vh;
+    }
+
     .mb {
         margin-bottom: 15px;
     }
@@ -336,6 +353,36 @@
     .mtp {
         margin-top: 5px;
     }
+
+    @@media screen and (max-width: 768px) {
+    .card-body-custom {
+        padding: 1rem;
+    }
+
+    .card-title, .card-header-custom {
+        font-size: 1rem;
+    }
+
+    .score {
+        font-size: 3rem;
+    }
+
+    .add-exchange, .back-home {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .timer-button {
+        margin-left: 0.25rem;
+        margin-right: 0.25rem;
+    }
+
+    .timer-button.long {
+        width: 45%;
+    }
+
+    /* Additional responsive styles as needed */
+}
 </style>
 
 @code {
@@ -349,26 +396,38 @@
     // Displays
     public int Pool;
     public int MatchCurrent, MatchTotal;
-    public string F1_Name, F2_Name;
+    public string? F1_Name, F2_Name;
     public int F1_Health, F2_Health;
-    public string TimeRemaining;
-    public string Upcoming1, Upcoming2;
-    public List<MatchEvent> TestEvents;
-    private int evtCounter = 0;
 
-    private Modal modal;
+    public string? Upcoming1, Upcoming2;
+
+    //Timer
+    private System.Threading.Timer timer;
+    private TimeSpan TimeRemaining = TimeSpan.FromMinutes(1);
+    private string TimerStr => $"{TimeRemaining.Minutes:D2}:{TimeRemaining.Seconds:D2}";
+    private bool timerPaused;
+
+    // Events
+    public List<MatchEvent>? TestEvents;
+    private int maxEvents = 20;
+
+    // Modal
+    private Modal? modal;
     private bool showModal;
     private string modalTestMessage = "This is hopefully multi-line content.<br />Like this! ";
     private string backModalMessage = "This isn't available yet, soon though!";
 
+    // Point / Penalty Buttons
     private Components.ActiveMatch.PointButtons redPoints, bluePoints;
     private Components.ActiveMatch.PenaltyButtons redPenalties, bluePenalties;
 
     protected override async Task OnInitializedAsync()
     {
+        timerPaused = true;
+        timer = new System.Threading.Timer(TimerCallback, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
         F1_Health = 10;
         F2_Health = 10;
-        TimeRemaining = "00:25";
+        TimeRemaining = new TimeSpan(0, 25, 0);
         Upcoming1 = "Jim Campbell (Red) vs Josh Fisher (Blue)";
         Upcoming2 = "Jacinta Reynolds (Red) vs Luke Tornilla (Blue)";
         MatchCurrent = 1;
@@ -384,8 +443,19 @@
 
         SetupPointsAndPenalties();
 
+        Tick();
         Demo();
-        await Refresh();
+        Refresh();
+    }
+
+    public void Dispose()
+    {
+        timer?.Dispose();
+    }
+
+    private async Task Tick ()
+    {
+
     }
 
     private async Task Refresh()
@@ -403,15 +473,16 @@
         }
     }
 
+    private async Task SetupFromMatch (Match match)
+    {
+        F1_Health = match.FighterOneHealth;
+        F2_Health = match.FighterTwoHealth;
+        TimeRemaining = TimeSpan.FromMinutes(match.Duration);
+        timerPaused = true;
+    }
+
     private async Task Demo ()
     {
-        F1_Health--;
-        F2_Health--;
-
-        if (F1_Health < 0) { F1_Health = 10; F2_Health = 10; }
-
-        TimeRemaining = DateTime.Now.ToString("mm:ss");
-
         Pool++;
         if (Pool > 3) { Pool = 0; }
 
@@ -419,19 +490,6 @@
         if (MatchCurrent > MatchTotal)
         {
             MatchCurrent = 1;
-        }
-
-        evtCounter++;
-        if (evtCounter > 2) { evtCounter = 0; }
-        string eType = "Strike";
-        switch (evtCounter)
-        {
-            case 1:
-                eType = "Penalty";
-                break;
-            case 2:
-                eType = "Disqualification";
-                break;
         }
 
         StateHasChanged();
@@ -453,7 +511,7 @@
 
     public void AddEvent ()
     {
-        if (TestEvents.Count > 4)
+        if (TestEvents?.Count > maxEvents)
         {
             TestEvents.Clear();
             StateHasChanged();
@@ -469,7 +527,7 @@
 
         // I think events need to not have a single type, but essentially two events - one for red one for blue
         string evt = redPenalty ? redEvt : bluePenalty ? blueEvt : "Strike";
-        TestEvents.Add(new MatchEvent()
+        TestEvents?.Add(new MatchEvent()
         {
             EventType = evt,
             FighterOneReduction = redPoint,
@@ -514,5 +572,32 @@
         redPenalties.SetTeam(true);
         bluePenalties.SetTeam(false);
         StateHasChanged();
+    }
+
+    private void ToggleTimer ()
+    {
+        timerPaused = !timerPaused;
+    }
+
+    private void TimerCallback(object? state)
+    {
+        if (!timerPaused)
+        {
+            if (TimeRemaining.TotalSeconds > 0)
+            {
+                TimeRemaining = TimeRemaining.Add(TimeSpan.FromSeconds(-1));
+                InvokeAsync(() => StateHasChanged());
+            }
+            else
+            {
+                timerPaused = true;
+                OnTimerFinished();
+            }
+        }
+    }
+
+    private void OnTimerFinished ()
+    {
+        
     }
 }
