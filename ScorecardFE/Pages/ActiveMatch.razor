@@ -28,7 +28,7 @@
                             @F1_Name
                         </div>
                         <div class="card-body card-body-custom">
-                            <div class="score">@F1_Health</div>
+                            <div class="score">@match.FighterOneHealth</div>
                         </div>
                     </div>
 
@@ -55,7 +55,7 @@
                             @F2_Name
                         </div>
                         <div class="card-body card-body-custom">
-                            <div class="score">@F2_Health</div>
+                            <div class="score">@match.FighterTwoHealth</div>
                         </div>
                     </div>
 
@@ -85,14 +85,14 @@
             <div class="card mb">
                 <div class="card-body">
                     <h5 class="card-title">Match Details</h5>
-                    <h6 class="card-title">Pool @Pool | Match @MatchCurrent / @MatchTotal</h6>
+                    <h6 class="card-title">Pool @match.Pool | Match @MatchCurrent / @MatchTotal</h6>
                     <div style="height: 3.25vh;" />
                     <h6 class="card-title">Winner</h6>
-                    @if (F1_Health > F2_Health)
+                    @if (match.FighterOneHealth > match.FighterTwoHealth)
                     {
                         <div class="winner-indicator red">Red</div>
                     }
-                    else if (F2_Health > F1_Health)
+                    else if (match.FighterTwoHealth > match.FighterOneHealth)
                     {
                         <div class="winner-indicator blue">Blue</div>
                     }
@@ -108,14 +108,19 @@
                     <h5 class="card-title">Time Remaining</h5>
                     <div style="height: 1vh" />
                     <div class="d-flex justify-content-between align-items-center">
-                        <button type="button" class="btn timer-button">-5</button>
-                        <button type="button" class="btn match-timer" onclick="() => ToggleTimer()">@TimerStr</button>
-                        <button type="button" class="btn timer-button">+5</button>
+                        <button type="button" class="btn timer-button" @onclick="() => AdjustTimer(-5)">-5</button>
+                        <button type="button" class="btn match-timer" @onclick="() => ToggleTimer()">@TimerStr</button>
+                        <button type="button" class="btn timer-button" @onclick="() => AdjustTimer(5)">+5</button>
+                    </div>
+                    <div style="height: 3vh" />
+                    <div class="d-flex justify-content-between align-items-center">
+                        <button type="button" class="btn timer-button long" @onclick="() => ResetTimer()">Reset</button>
+                        <button type="button" class="btn timer-button long">Time Hold</button>
                     </div>
                     <div style="height: 1.5vh" />
                     <div class="d-flex justify-content-between align-items-center">
-                        <button type="button" class="btn timer-button long">Reset</button>
-                        <button type="button" class="btn timer-button long">Time Hold</button>
+                        <button type="button" class="btn timer-button long">Start Match</button>
+                        <button type="button" class="btn timer-button long">Finish Match</button>
                     </div>
                 </div>
             </div>
@@ -133,7 +138,7 @@
             <!-- Debug -->
             <div class="card mt">
                 <div class="card-body d-flex justify-content-center">
-                    <button type="button" class="btn btn-primary mt-2 mb-2">Debug: Setup From Match</button>
+                    <button type="button" class="btn btn-primary mt-2 mb-2" @onclick="() => SetupFromMatch_Random()">Debug: Setup Random Match</button>
                 </div>
             </div>
 
@@ -148,7 +153,7 @@
     <div class="card c-border-dark">
         <div class="card-body event-container p-2">
             <div class="row">
-                @foreach (var evt in TestEvents)
+                @foreach (var evt in match.Events)
                 {
                     <ScorecardFE.Components.ActiveMatch.Event MatchEvent="evt" OnRemove="(e) => RemoveEvent(e)" />
                 }
@@ -156,14 +161,10 @@
         </div>
     </div>
 
-    <div style="height:50px"></div>
-
-    <div style="height:50px"></div>
-    <!-- Modal, currently hidden -->
-
+    <!-- Modal, hidden -->
     <div style="display:block">
         <Modal @ref="modal"></Modal>
-        <button style="width: 100%" @onclick="() => ToggleModal(true, modalTestMessage)">Open Modal</button>
+        <!--<button style="width: 100%" @onclick="() => ToggleModal(true, modalTestMessage)">Open Modal</button>-->
     </div>
 
     <div style="height:50px"></div>
@@ -176,8 +177,9 @@
         - Add option to clear last exchange (done)
         - Remove point association with penalties (done)
         - Fix the timer area (done)
-        - Start implementing 'setup from match', instead of purely dynamic variables
-        - Add start / stop buttons for matches
+        - Start implementing 'setup from match', instead of purely dynamic variables (done)
+        - Add start / stop buttons for matches (needs functionality)
+        - subtract health on event
         - Auto stop match on no health or time out
         - Add tournament setup rule for whether points can go negative
         - Display event time as seconds from match start
@@ -389,15 +391,13 @@
     [Parameter]
     public string? MatchId { get; set; }
 
-    private TournamentOutputDTO[]? tournaments;
+    private Match match;
 
     private const int RefreshInterval = 5000;
 
     // Displays
-    public int Pool;
     public int MatchCurrent, MatchTotal;
     public string? F1_Name, F2_Name;
-    public int F1_Health, F2_Health;
 
     public string? Upcoming1, Upcoming2;
 
@@ -408,7 +408,6 @@
     private bool timerPaused;
 
     // Events
-    public List<MatchEvent>? TestEvents;
     private int maxEvents = 20;
 
     // Modal
@@ -423,27 +422,34 @@
 
     protected override async Task OnInitializedAsync()
     {
-        timerPaused = true;
         timer = new System.Threading.Timer(TimerCallback, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
-        F1_Health = 10;
-        F2_Health = 10;
-        TimeRemaining = new TimeSpan(0, 25, 0);
+
+        var setupMatch = new Match()
+        {
+            Duration = 2,
+            FighterOneHealth = 10,
+            FighterTwoHealth = 10,
+            FighterOneId = 1,
+            FighterTwoId = 2,
+            Pool = 2,
+            Events = new List<MatchEvent>()
+        };
+
+        SetupFromMatch(setupMatch);
+
         Upcoming1 = "Jim Campbell (Red) vs Josh Fisher (Blue)";
         Upcoming2 = "Jacinta Reynolds (Red) vs Luke Tornilla (Blue)";
         MatchCurrent = 1;
         MatchTotal = 25;
         F1_Name = "Lee North";
         F2_Name = "Peter Carey";
-        TestEvents = new List<MatchEvent>();
 
-        screenData.RegisterData("ActiveMatch", "ShowModal", new ScreenData_Bool() { Value = false });
         await FetchData();
 
         StateHasChanged();
 
         SetupPointsAndPenalties();
 
-        Tick();
         Demo();
         Refresh();
     }
@@ -451,11 +457,6 @@
     public void Dispose()
     {
         timer?.Dispose();
-    }
-
-    private async Task Tick ()
-    {
-
     }
 
     private async Task Refresh()
@@ -473,19 +474,30 @@
         }
     }
 
-    private async Task SetupFromMatch (Match match)
+    private async Task SetupFromMatch (Match newMatch)
     {
-        F1_Health = match.FighterOneHealth;
-        F2_Health = match.FighterTwoHealth;
-        TimeRemaining = TimeSpan.FromMinutes(match.Duration);
-        timerPaused = true;
+        match = newMatch;
+        ResetTimer();
+    }
+
+    private async Task SetupFromMatch_Random()
+    {
+        var r = new System.Random();
+        var m = new Match()
+        {
+            Duration = r.Next(1, 4),
+            FighterOneHealth = r.Next(11),
+            FighterTwoHealth = r.Next(11),
+            FighterOneId = 1,
+            FighterTwoId = 2,
+            Pool = r.Next(5),
+            Events = new List<MatchEvent>()
+        };
+        SetupFromMatch(m);
     }
 
     private async Task Demo ()
     {
-        Pool++;
-        if (Pool > 3) { Pool = 0; }
-
         MatchCurrent++;
         if (MatchCurrent > MatchTotal)
         {
@@ -502,18 +514,13 @@
     private async Task FetchData()
     {
         int parsedID = int.Parse(MatchId);
-
-        string tournamentJson = await Http.GetStringAsync($"api/tournament");
-        tournaments = JsonConvert.DeserializeObject<TournamentOutputDTO[]>(tournamentJson);
-
-        dataTransfer.Tournaments = tournaments;
     }
 
     public void AddEvent ()
     {
-        if (TestEvents?.Count > maxEvents)
+        if (match.Events?.Count > maxEvents)
         {
-            TestEvents.Clear();
+            match.Events.Clear();
             StateHasChanged();
         }
 
@@ -527,7 +534,7 @@
 
         // I think events need to not have a single type, but essentially two events - one for red one for blue
         string evt = redPenalty ? redEvt : bluePenalty ? blueEvt : "Strike";
-        TestEvents?.Add(new MatchEvent()
+        match.Events?.Add(new MatchEvent()
         {
             EventType = evt,
             FighterOneReduction = redPoint,
@@ -544,9 +551,9 @@
 
     public void RemoveEvent(MatchEvent evt)
     {
-        if (TestEvents.Contains(evt))
+        if (match.Events.Contains(evt))
         {
-            TestEvents.Remove(evt);
+            match.Events.Remove(evt);
         }
         StateHasChanged();
     }
@@ -579,6 +586,22 @@
         timerPaused = !timerPaused;
     }
 
+    private void ToggleTimer (bool state)
+    {
+        timerPaused = !state;
+    }
+
+    private void AdjustTimer (int increment)
+    {
+        TimeRemaining = TimeRemaining.Add(TimeSpan.FromSeconds(increment));
+    }
+
+    private void ResetTimer ()
+    {
+        TimeRemaining = TimeSpan.FromMinutes(match.Duration);
+        timerPaused = true;
+    }
+
     private void TimerCallback(object? state)
     {
         if (!timerPaused)
@@ -590,7 +613,6 @@
             }
             else
             {
-                timerPaused = true;
                 OnTimerFinished();
             }
         }
@@ -598,6 +620,7 @@
 
     private void OnTimerFinished ()
     {
-        
+        ToggleTimer(false);
+        ToggleModal(true, "Timer has finished");
     }
 }
